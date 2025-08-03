@@ -26,7 +26,7 @@ Route::get(
         //     ['name' => 'Hassan Ali', 'age' => 45, 'salary' => 9000],
         //     ['name' => 'Ali Hassan', 'age' => 50, 'salary' => 10000],
         // ];
-    
+
         $db = new mysqli('localhost', 'root', '', 'classicmodels');
 
         $qry = 'SELECT * FROM employees;';
@@ -35,7 +35,7 @@ Route::get(
         $employees = $res->fetch_all(MYSQLI_ASSOC);
         $db->close();
 
-        ?>
+?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -74,7 +74,7 @@ Route::get(
     </body>
 
     </html>
-    <?php
+<?php
 
     }
 );
@@ -99,6 +99,72 @@ Route::view('contact-us', 'static.contact');
 Route::redirect('contact', 'contact-us', 301);
 
 Route::view('privacy-policy', 'static.privacy-policy');
+
+Route::prefix('users')->group(function () {
+$users = [
+    ['id' => 1, 'name' => 'Mohamed Emad', 'email' => 'mohamedemad@example.com', 'phone' => '01000000000', 'role' => 'admin'],
+    ['id' => 2, 'name' => 'Ahmed Ali', 'email' => 'ahmedali@example.com', 'phone' => '01000000001', 'role' => 'manager'],
+    ['id' => 3, 'name' => 'Yousef Anis', 'email' => 'yousef@example.com', 'phone' => '01000000002', 'role' => 'guest'],
+    ['id' => 4, 'name' => 'Sara Kamal', 'email' => 'sara@example.com', 'phone' => '01000000003', 'role' => 'admin'],
+    ['id' => 5, 'name' => 'Mostafa Ashraf', 'email' => 'mostafa@example.com', 'phone' => '01000000004', 'role' => 'user'],
+    ['id' => 6, 'name' => 'Huda Saleh', 'email' => 'huda@example.com', 'phone' => '01000000005', 'role' => 'guest'],
+    ['id' => 7, 'name' => 'Amr Fathy', 'email' => 'amr@example.com', 'phone' => '01000000006', 'role' => 'manager'],
+    ['id' => 8, 'name' => 'Maged Ali', 'email' => 'magedali@example.com', 'phone' => '01000000007', 'role' => 'admin'],
+    ['id' => 9, 'name' => 'Ali Ibrahim', 'email' => 'aliibrahim@example.com', 'phone' => '01000000008', 'role' => 'user'],
+    ['id' => 10, 'name' => 'Hassan Ali', 'email' => 'hassanali@example.com', 'phone' => '01000000009', 'role' => 'manager'],
+    ['id' => 11, 'name' => 'Laila Adel', 'email' => 'laila@example.com', 'phone' => '01000000010', 'role' => 'user'],
+    ['id' => 12, 'name' => 'Tamer Younis', 'email' => 'tamer@example.com', 'phone' => '01000000011', 'role' => 'guest'],
+    ['id' => 13, 'name' => 'Nour Gamil', 'email' => 'nour@example.com', 'phone' => '01000000012', 'role' => 'manager'],
+    ['id' => 14, 'name' => 'Ehab Zaki', 'email' => 'ehab@example.com', 'phone' => '01000000013', 'role' => 'admin'],
+    ['id' => 15, 'name' => 'Mona Farid', 'email' => 'mona@example.com', 'phone' => '01000000014', 'role' => 'guest'],
+];
+    // 1. /users → show all users
+    Route::get('/', function () use ($users) {
+        return view('users.index', compact('users'));
+    });
+
+    // 2. /users/create → show form to create user (no submit)
+    Route::get('/create', function () {
+        return view('users.create');
+    });
+
+
+    // 3. /users/show/{id} → show a specific user (numbers only)
+    Route::get('/show/{id}', function ($id) use ($users) {
+    $user = collect($users)->firstWhere('id', (int) $id);
+
+    if (!$user) {
+        abort(404, 'User not found');
+    }
+
+    return view('users.show', compact('user'));
+})->whereNumber('id');
+
+
+
+    // 4. /users/{id}/edit → show form to edit user info (no submit)
+  Route::get('/{id}/edit', function ($id) use ($users) {
+    $user = collect($users)->firstWhere('id', (int) $id);
+
+    if (!$user) {
+        abort(404, 'User not found');
+    }
+
+    return view('users.edit', compact('user'));
+})->whereNumber('id');
+
+    //5. /users/role/{role} → filter by role (admin, guest, manager only)
+    Route::get('/role/{role}', function ($role) use ($users) {
+        $validRoles = ['admin', 'guest', 'manager'];
+        abort_unless(in_array($role, $validRoles), 404);
+
+        $filtered = collect($users)->where('role', $role);
+        return view('users.role', ['users' => $filtered, 'role' => ucfirst($role)]);
+    })->whereIn('role', ['admin', 'guest', 'manager']);
+});
+
+
+
 
 
 Route::prefix('customers')->group(function () {
