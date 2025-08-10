@@ -23,7 +23,8 @@ php artisan make:controller ControllerName --resource
 
 # Create table 
 ```bash
-php artisan migrate:make create_table_name
+php artisan make:migration create_table_name
+```
 
 # Run Pending Migrations
 ```bash
@@ -58,4 +59,10 @@ php artisan migrate:fresh
 # Check the migration status
 ```bash
 php artisan migrate:status
+```
+
+
+# Create model
+```bash
+php artisan make:model Post
 ```

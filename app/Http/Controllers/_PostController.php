@@ -13,7 +13,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        // return Post::all();
+        return Post::get();
     }
 
     /**
@@ -37,7 +38,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return $post;
     }
 
     /**
@@ -62,5 +63,21 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+
+    /**
+     * Randomly select n posts from the database.
+     */
+
+    public function random()
+    {
+        // Only this will return all in random order
+        // return Post::inRandomOrder()->get();
+
+        // Next methods will return one random post
+        // return Post::inRandomOrder()->first();
+        // return Post::all()->random();
+        return Post::get()->random();
     }
 }

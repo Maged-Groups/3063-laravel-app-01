@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\UpdatePostRequest;
+use App\Models\Reaction;
+use App\Http\Requests\StoreReactionRequest;
+use App\Http\Requests\UpdateReactionRequest;
 
-class PostController extends Controller
+class ReactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(StoreReactionRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Reaction $reaction)
     {
         //
     }
@@ -43,7 +43,7 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit(Reaction $reaction)
     {
         //
     }
@@ -51,7 +51,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(UpdateReactionRequest $request, Reaction $reaction)
     {
         //
     }
@@ -59,7 +59,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(Reaction $reaction)
     {
         //
     }
