@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\PostStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,10 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => fake()->sentence(),
+            'user_id' => User::inRandomOrder()->first()->id, // same as next one
+            'post_status_id' => PostStatus::get()->random()->id, // same as prev one
+            'body' => fake()->paragraph(),
         ];
     }
 }

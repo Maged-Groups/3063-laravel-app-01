@@ -66,3 +66,21 @@ php artisan migrate:status
 ```bash
 php artisan make:model Post
 ```
+<!-- Seeders and Factory -->
+# Create Seeders and Factories
+```bash
+php artisan make:seeder UserSeeder
+php artisan make:factory UserFactory
+```
+# Run Seeders
+```bash
+php artisan db:seed --class=UserSeeder
+```
+# Run All Seeders
+```bash
+php artisan db:seed
+```
+# Re-migrate and seed
+```bash
+php artisan migrate:fresh --seed
+```
