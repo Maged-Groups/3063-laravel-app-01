@@ -14,7 +14,11 @@ class PostController extends Controller
     public function index()
     {
         // return Post::all();
-        return Post::get();
+        // return Post::with('comments')->limit(10)->get();
+        // return Post::with('comments')->with('user')->with('post_status')->limit(10)->get();
+        // return Post::with('comments', 'user', 'post_status')->limit(10)->get();
+        return Post::with('comments.replies', 'user', 'post_status')->limit(10)->get();
+        // return Post::withCount('comments')->limit(10)->get();
     }
 
     /**
@@ -38,7 +42,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return $post;
+        // return $post;
+        // return $post->comments;
+        // return $post->load('comments', 'user', 'post_status');
+        return $post->load('reactions');
     }
 
     /**
