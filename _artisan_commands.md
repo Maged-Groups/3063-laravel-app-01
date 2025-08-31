@@ -84,3 +84,8 @@ php artisan db:seed
 ```bash
 php artisan migrate:fresh --seed
 ```
+
+# install Laravel/Sanctum API
+```bash
+php artisan install:api
+```

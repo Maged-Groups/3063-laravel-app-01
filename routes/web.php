@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 
+Route::get('/', function () {
+    return 'Welcome  Web';
+});
+
 
 // Define custom routes for the PostController before the resource routes
 Route::prefix('posts')->controller(PostController::class)->group(function () {
