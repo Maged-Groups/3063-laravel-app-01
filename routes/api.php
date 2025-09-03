@@ -11,11 +11,14 @@ Route::get('/', function () {
 
 Route::prefix('auth')->controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
+    Route::post('register', 'register');
 });
 
 
-Route::apiResources(
-    [
-        'posts' => PostController::class,
-    ]
-);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResources(
+        [
+            'posts' => PostController::class,
+        ]
+    );
+});
