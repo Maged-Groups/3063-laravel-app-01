@@ -10,30 +10,17 @@ class AuthController extends Controller
 {
     //
 
-    public function login(LoginRequest $request)
+    public function web_login(LoginRequest $request)
     {
-        // $data in case of local validation (inside controller)
-        // $data = $request->validate([
-        //     'email' => "required|email|exists:users,email",
-        //     'password' => "required|between:8,20"
-        // ], [
-        //     'email.required' => 'لابد من كتابة البريد الإلكتروني',
-        //     'email.exists' => 'email.not-exists'
-        // ]);
 
-        // $data in case of using the Request Class for validation (LoginRequest)
         $data = $request->validated();
-        return $data;
-
-        // $data in case of manual without validation
-        // $data = $request->only(['email', 'password']);
 
         $auth = Auth::attempt($data);
 
         if ($auth) {
             $user = Auth::user();
 
-            $token = $user->createToken('login');
+            $token = $user->createToken('web');
 
             $user['token'] = $token->plainTextToken;
 
@@ -42,5 +29,76 @@ class AuthController extends Controller
 
         return 'No';
 
+    }
+
+    public function mobile_login(LoginRequest $request)
+    {
+
+        $data = $request->validated();
+
+        $auth = Auth::attempt($data);
+
+        if ($auth) {
+            $user = Auth::user();
+
+            $token = $user->createToken('mobile');
+
+            $user['token'] = $token->plainTextToken;
+
+            return $user;
+        }
+
+        return 'No';
+
+    }
+
+    public function active_sessions()
+    {
+        // $user = Auth::user();
+        $user = auth()->user();
+        return $user->tokens;
+    }
+
+    public function logout_session($id)
+    {
+        $session = auth()->user()->tokens()->where('id', $id)->first();
+
+        $status = $session ? $session->delete() : false;
+
+        if ($status) return 'Session Deleted Successfully';
+        else return 'Session not found';
+
+    }
+    
+    public function logout_current () {
+        $seesion = auth()->user()->currentAccessToken();
+
+        if ($seesion)
+                return $seesion->delete();
+        else
+            return 'No active session';
+    }
+
+    public function logout_others () {
+        $activeSeesion = auth()->user()->currentAccessToken();
+
+        $Deleted = auth()->user()->tokens()->whereNot('id', $activeSeesion->id )->delete();
+
+        // return $allActiveSessions;
+
+        if ($Deleted)
+                return 'Logged out from other sessions successfully';
+        else
+            return 'No active session';
+    }
+
+    public function logout_all () {
+ 
+        $Deleted = auth()->user()->tokens()->delete();
+
+        if ($Deleted)
+                return 'Logged out from all sessions successfully';
+        else
+            return 'No active session';
     }
 }
