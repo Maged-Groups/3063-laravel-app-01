@@ -25,6 +25,14 @@ Route::prefix('auth')->controller(AuthController::class)->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
+
+    // Comments
+    Route::prefix('comments')->controller(CommentController::class)->group(function () {
+        Route::get('deleted', 'deleted');
+        Route::get('restore/{id}', 'restore');
+        Route::delete('hard-delete/{id}', 'hard_delete');
+    });
+
     // Posts, comments, reactions, users, replies
     Route::apiResources(
         [

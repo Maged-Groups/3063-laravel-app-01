@@ -22,7 +22,9 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|between:10,20',
+            'body' => 'required|between:50,500',
+            'post_status_id' => 'required|exists:post_statuses,id',
         ];
     }
 }

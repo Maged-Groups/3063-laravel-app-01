@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
@@ -14,12 +15,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        // return Post::all();
-        // return Post::with('comments')->limit(10)->get();
-        // return Post::with('comments')->with('user')->with('post_status')->limit(10)->get();
-        // return Post::with('comments', 'user', 'post_status')->limit(10)->get();
-        return Post::with('comments.replies', 'user', 'post_status')->limit(10)->get();
-        // return Post::withCount('comments')->limit(10)->get();
+
+        $posts = Post::with('user')->get();
+
+        $json_posts = PostResource::collection($posts);
+
+        return $json_posts;
+
     }
 
     /**
@@ -36,7 +38,17 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         // return dd($request);
-        return $request;
+
+        $data = $request->validated();
+
+        $data['user_id'] = auth()->user()->id;
+
+        $added = Post::create($data);
+
+        if ($added)
+            return $added;
+
+        return 'Cannot post now!!!';
     }
 
     /**
@@ -44,10 +56,14 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        // return $post;
         // return $post->comments;
         // return $post->load('comments', 'user', 'post_status');
-        return $post->load('reactions');
+        $post->load(['reactions', 'user']);
+
+        $post_json = PostResource::make($post);
+
+        return $post_json;
+
     }
 
     /**
