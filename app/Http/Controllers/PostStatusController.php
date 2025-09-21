@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostStatusResource;
 use App\Models\PostStatus;
 use App\Http\Requests\StorePostStatusRequest;
 use App\Http\Requests\UpdatePostStatusRequest;
@@ -13,7 +14,13 @@ class PostStatusController extends Controller
      */
     public function index()
     {
-        //
+        $post_statuses = PostStatus::all();
+
+        $post_statuses = PostStatusResource::collection($post_statuses);
+
+        return $post_statuses;
+
+
     }
 
     /**
@@ -37,7 +44,9 @@ class PostStatusController extends Controller
      */
     public function show(PostStatus $postStatus)
     {
-        //
+        $postStatus = PostStatusResource::make($postStatus);
+
+        return $postStatus;
     }
 
     /**

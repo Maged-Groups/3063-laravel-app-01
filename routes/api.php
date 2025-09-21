@@ -6,7 +6,10 @@ use App\Http\Controllers\{
     PostController,
     ReactionController,
     ReplyController,
-    UserController
+    UserController,
+    PostStatusController,
+    ReactionTypeController
+
 };
 
 use Illuminate\Http\Request;
@@ -41,6 +44,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
             'replies' => ReplyController::class,
             'users' => UserController::class,
             'reactions' => ReactionController::class,
+            'post-statuses' => PostStatusController::class,
+            'reaction-types' => ReactionTypeController::class,
         ]
     );
 

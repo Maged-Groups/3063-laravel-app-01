@@ -13,7 +13,7 @@ class ReactionController extends Controller
      */
     public function index()
     {
-        //
+        // 
     }
 
     /**

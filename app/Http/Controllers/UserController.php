@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -13,7 +14,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+
+        $users = UserResource::collection($users);
+
+        return $users;
     }
 
     /**
@@ -37,7 +42,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        $user = UserResource::make($user);
+
+        return $user;
     }
 
     /**
