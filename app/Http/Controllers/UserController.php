@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
@@ -14,9 +15,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with(['posts.comments.user', 'posts.comments.replies.user'])->withCount('posts')->limit(2)->get();
 
-        $users = UserResource::collection($users);
+        UserCollection::wrap('All Users');
+
+        $users = new UserCollection($users);
 
         return $users;
     }
@@ -42,6 +45,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        UserResource::wrap('Single user data');
+
         $user = UserResource::make($user);
 
         return $user;

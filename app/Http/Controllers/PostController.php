@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index()
     {
 
-        $posts = Post::with('user')->get();
+        $posts = Post::with('user')->limit(3)->get();
 
         $json_posts = PostResource::collection($posts);
 
@@ -58,13 +58,14 @@ class PostController extends Controller
     {
         // return $post->comments;
         // return $post->load('comments', 'user', 'post_status');
-        $post->load(['reactions', 'user']);
+        // $post->load(['reactions', 'user']);
 
         $post_json = PostResource::make($post);
 
         return $post_json;
 
     }
+
 
     /**
      * Show the form for editing the specified resource.

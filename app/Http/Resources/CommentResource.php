@@ -20,7 +20,9 @@ class CommentResource extends JsonResource
             'Post Id' => $this->post_id,
             'By' => $this->user->name,
             'By ID' => $this->user->id,
-            'Commented on' => $this->created_at->diffForHumans()
+            'Commented on' => $this->created_at->diffForHumans(),
+            'User' => UserResource::make($this->whenLoaded('user')),
+            'replies' => ReplyResource::collection($this->whenLoaded('replies'))
         ];
     }
 }

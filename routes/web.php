@@ -36,7 +36,7 @@ Route::get('init', function () {
     ];
 
     foreach ($models as $model) {
-        Artisan::call('make:resource', ['name' => $model . 'Resource']);
+        Artisan::call('make:resource', ['name' => $model . 'Collection']);
 
         // Hold the loop for 1 second
         // sleep(1);

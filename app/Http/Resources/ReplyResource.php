@@ -18,8 +18,7 @@ class ReplyResource extends JsonResource
             'Id' => $this->id,
             'reply' => $this->reply,
             'Comment Id' => $this->comment_id,
-            'User Id' => $this->user_id,
-            'By' => $this->user->name,
+            'User' => UserResource::make($this->whenLoaded('user'))
         ];
     }
 }
