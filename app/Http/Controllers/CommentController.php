@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CommentResource;
-use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\CommentCollection;
+use App\Models\Comment;
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
@@ -21,6 +23,17 @@ class CommentController extends Controller
         return $comments;
     }
 
+    /**
+     * Display the comments of the loggd in user.
+     */
+    public function my_comments()
+    {
+        $user_id = auth()->user()->id;
+
+        $comments = Comment::where('user_id', $user_id)->get();
+
+        return CommentCollection::make($comments);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -33,7 +46,7 @@ class CommentController extends Controller
 
         $comment = Comment::create($data);
 
-        return $comment;
+        return CommentResource::make($comment);
     }
 
     /**
@@ -41,9 +54,12 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
+        Gate::authorize('view', $comment);
+        
         $comment = CommentResource::make($comment);
-    }
 
+        return $comment;
+    }
 
     /**
      * Update the specified resource in storage.
@@ -81,11 +97,10 @@ class CommentController extends Controller
 
         $comment = Comment::where('id', $id)->onlyTrashed()->first();
 
-
         if ($comment) {
-
+            Gate::authorize('restore', $comment);
+         
             $restored = $comment->restore();
-
 
             return $restored ? 'Comment Restored Successfully' : 'Cannot restore the comment as the moment';
         }
@@ -103,9 +118,26 @@ class CommentController extends Controller
             if ($deleted) {
                 return 'Comment Destroyed from the database';
             }
+
             return 'Cannot delete your comment';
         }
 
         return 'No comments with this id found in the database!!!';
+    }
+
+    public function permanent_delete(Comment $comment)
+    {
+
+        Gate::authorize('forceDelete', $comment);
+
+        if ($comment) {
+            $deleted = $comment->forceDelete();
+
+            if ($deleted) {
+                return 'Comment Destroyed from the database';
+            }
+
+            return 'Cannot delete your comment';
+        }
     }
 }

@@ -23,6 +23,19 @@ class PostController extends Controller
         return $json_posts;
 
     }
+    /**
+     * Display logged in user posts
+     */
+    public function my_posts()
+    {
+
+        $posts = Post::where('user_id', auth()->user()->id)->with('comments')->get();
+
+        $json_posts = PostResource::collection($posts);
+
+        return $json_posts;
+
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -59,6 +72,8 @@ class PostController extends Controller
         // return $post->comments;
         // return $post->load('comments', 'user', 'post_status');
         // $post->load(['reactions', 'user']);
+        $post->load('comments');
+
 
         $post_json = PostResource::make($post);
 

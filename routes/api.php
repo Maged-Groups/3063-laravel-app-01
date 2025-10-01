@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\HasRolesMiddleware;
+
 use App\Http\Controllers\{
     AuthController,
     CommentController,
@@ -29,11 +31,18 @@ Route::prefix('auth')->controller(AuthController::class)->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
 
 
+    // posts
+    Route::prefix('posts')->controller(PostController::class)->group(function(){
+        Route::get('my-posts', 'my_posts');
+    });
+
     // Comments
     Route::prefix('comments')->controller(CommentController::class)->group(function () {
         Route::get('deleted', 'deleted');
         Route::get('restore/{id}', 'restore');
+        Route::delete('permanent-delete/{comment}', 'permanent_delete');
         Route::delete('hard-delete/{id}', 'hard_delete');
+        Route::get('my-comments', 'my_comments');
     });
 
     // Posts, comments, reactions, users, replies
