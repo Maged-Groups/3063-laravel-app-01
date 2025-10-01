@@ -12,7 +12,16 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        $route_roles = [
+            'admin',
+            'show_users'
+        ];
+
+        $user_roles = auth()->user()->currentAccessToken()->abilities;
+
+        $has_role = array_intersect($route_roles, $user_roles);
+
+        return count($has_role) > 0;
     }
 
     /**

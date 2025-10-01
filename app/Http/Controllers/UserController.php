@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
+
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -15,7 +17,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with(['posts.comments.user', 'posts.comments.replies.user'])->withCount('posts')->limit(2)->get();
+        Gate::authorize('viewAny', User::class);
+
+        $users = User::all();
 
         UserCollection::wrap('All Users');
 

@@ -22,7 +22,7 @@ class AuthController extends Controller
         if ($auth) {
             $user = Auth::user();
 
-            $token = $user->createToken('web');
+            $token = $user->createToken('web', explode(',',$user->roles));
 
             $user['token'] = $token->plainTextToken;
 
@@ -43,7 +43,7 @@ class AuthController extends Controller
         if ($auth) {
             $user = Auth::user();
 
-            $token = $user->createToken('mobile');
+            $token = $user->createToken('mobile', ['show_users']);
 
             $user['token'] = $token->plainTextToken;
 
