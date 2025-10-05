@@ -13,8 +13,16 @@ class HasRolesMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $roles): Response
     {
-        return $next($request);
+
+        $routeRoles = explode('|', $roles);
+
+        foreach ($routeRoles as $role)
+            if (auth()->user()->tokenCan($role))
+                return $next($request);
+
+        abort(response()->json('You are not allowed to do this action...')->setStatusCode(401));
+
     }
 }
