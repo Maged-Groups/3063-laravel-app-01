@@ -22,15 +22,14 @@ class AuthController extends Controller
         if ($auth) {
             $user = Auth::user();
 
-            $token = $user->createToken('web', explode(',',$user->roles));
+            $token = $user->createToken('web', explode(',', $user->roles));
 
             $user['token'] = $token->plainTextToken;
 
-            return $user;
+            return $this->success(data: $user);
         }
 
-        return 'No';
-
+        return $this->fail(400);
     }
 
     public function mobile_login(LoginRequest $request)
@@ -67,48 +66,54 @@ class AuthController extends Controller
 
         $status = $session ? $session->delete() : false;
 
-        if ($status) return 'Session Deleted Successfully';
-        else return 'Session not found';
+        if ($status)
+            return 'Session Deleted Successfully';
+        else
+            return 'Session not found';
 
     }
-    
-    public function logout_current () {
+
+    public function logout_current()
+    {
         $seesion = auth()->user()->currentAccessToken();
 
         if ($seesion)
-                return $seesion->delete();
+            return $seesion->delete();
         else
             return 'No active session';
     }
 
-    public function logout_others () {
+    public function logout_others()
+    {
         $activeSeesion = auth()->user()->currentAccessToken();
 
-        $Deleted = auth()->user()->tokens()->whereNot('id', $activeSeesion->id )->delete();
+        $Deleted = auth()->user()->tokens()->whereNot('id', $activeSeesion->id)->delete();
 
         // return $allActiveSessions;
 
         if ($Deleted)
-                return 'Logged out from other sessions successfully';
+            return 'Logged out from other sessions successfully';
         else
             return 'No active session';
     }
 
-    public function logout_all () {
- 
+    public function logout_all()
+    {
+
         $Deleted = auth()->user()->tokens()->delete();
 
         if ($Deleted)
-                return 'Logged out from all sessions successfully';
+            return 'Logged out from all sessions successfully';
         else
             return 'No active session';
     }
 
-    public function register (RegisterRequest $request) {
-        
-       $user =  User::create($request->validated());
+    public function register(RegisterRequest $request)
+    {
 
-       return $user;
+        $user = User::create($request->validated());
+
+        return $user;
 
     }
 }
