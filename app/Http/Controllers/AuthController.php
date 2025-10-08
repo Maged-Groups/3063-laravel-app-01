@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -25,6 +27,9 @@ class AuthController extends Controller
             $token = $user->createToken('web', explode(',', $user->roles));
 
             $user['token'] = $token->plainTextToken;
+
+            Mail::to($request->email)
+                ->send(new WelcomeMail($user, 3500));
 
             return $this->success(data: $user);
         }
