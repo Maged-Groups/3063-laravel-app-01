@@ -15,18 +15,12 @@ class WelcomeMail extends Mailable
     use Queueable, SerializesModels;
 
 
-    public $user;
-    public $offerDetails;
-
-
-
     /**
      * Create a new message instance.
      */
-    public function __construct($user, $offerDetails)
+    public function __construct(public $user, public $offerDetails)
     {
-        $this->user = $user;
-        $this->offerDetails = $offerDetails;
+        //    
     }
 
     /**
@@ -57,7 +51,13 @@ class WelcomeMail extends Mailable
     public function attachments(): array
     {
         return [
-            // Attachment::fromPath(public_path('welcome.jpg'))->as('photo.jpg'),
+            Attachment::fromPath(public_path('imgs/welcome.jpg')),
+            Attachment::fromPath(public_path('storage/pdfs/Website usage Policy.docx'))->as('symbolic.docs'),
+            Attachment::fromPath(public_path('user/pdfs/ha123.pdf'))->as('symbolicuser.pdf'),
+            Attachment::fromStorageDisk('public', 'pdfs\Website usage Policy.docx'),
+            Attachment::fromStorageDisk('local', 'pdfs\confident.pdf'),
+            Attachment::fromStorageDisk('mine', 'pdfs\ha123.pdf')->as('fake_name.pdf'),
+            Attachment::fromStorageDisk('mine', 'pdfs\ha123.pdf'),
         ];
     }
 }

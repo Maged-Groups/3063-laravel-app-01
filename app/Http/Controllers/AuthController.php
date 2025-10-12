@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddAvatarRequest;
 use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -120,5 +121,16 @@ class AuthController extends Controller
 
         return $user;
 
+    }
+
+    public function change_photo(AddAvatarRequest $request)
+    {
+        $file = $request->file('avatar');
+        $ext = $file->getClientOriginalExtension();
+        $uid = auth()->user()->id;
+
+        $fileName = "$uid.$ext";
+
+        return $file->storeAs('avatars', $fileName, 'mine');
     }
 }
