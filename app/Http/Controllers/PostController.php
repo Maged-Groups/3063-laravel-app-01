@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -19,6 +20,8 @@ class PostController extends Controller
         $posts = Post::with('user')->limit(3)->get();
 
         $json_posts = PostResource::collection($posts);
+
+        Log::info('Posts', ['Posts List' => $json_posts]);
 
         return $json_posts;
 
